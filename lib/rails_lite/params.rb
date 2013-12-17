@@ -2,9 +2,10 @@ require 'uri'
 
 class Params
   def initialize(req, route_params)
-    @params = {}
-    req.query_string ||= ""
-    parse_www_encoded_form(req.query_string+route_params)
+    @params = route_params
+    query = req.query_string || ""
+    body = req.body || ""
+    parse_www_encoded_form(query + body)
   end
 
   def [](key)
@@ -19,7 +20,6 @@ class Params
   def parse_www_encoded_form(www_encoded_form)
     values = URI.decode_www_form(www_encoded_form)
     values.each { |key, value| update_key(key, value) }
-    end
   end
 
   def update_key(key, value)
