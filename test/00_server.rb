@@ -24,7 +24,8 @@ class MyController < ControllerBase
 end
 
 server.mount_proc '/' do |req, res|
-  MyController.new(req, res).go
+  c = MyController.new(req, res)
+  c.redirect_to('http://www.google.com')
 end
 
 server.start
