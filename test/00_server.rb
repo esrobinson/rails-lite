@@ -1,6 +1,6 @@
 require 'active_support/core_ext'
 require 'webrick'
-require 'rails_lite'
+require_relative '../lib/rails_lite'
 
 # http://www.ruby-doc.org/stdlib-2.0/libdoc/webrick/rdoc/WEBrick.html
 # http://www.ruby-doc.org/stdlib-2.0/libdoc/webrick/rdoc/WEBrick/HTTPRequest.html
@@ -19,12 +19,13 @@ class MyController < ControllerBase
     # after you have sessions going, uncomment:
    session["count"] ||= 0
    session["count"] += 1
+   flash["count"] = session["count"]
    render :counting_show
   end
 end
 
 server.mount_proc '/' do |req, res|
-  MyController.new(req, res).go
+  MyController.new(req, res, {}).go
 end
 
 server.start
